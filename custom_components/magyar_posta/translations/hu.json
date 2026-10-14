@@ -1,0 +1,152 @@
+{
+  "title": "Magyar Posta",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Magyar Posta beállítása",
+        "description": "A Magyar Posta nyomon követéséhez nem kell fiók vagy postai irányítószám — a hub azonnal létrejön. A csomagokat utólag add hozzá az integráció beállításaiban vagy a `magyar_posta.track_parcel` szolgáltatással."
+      }
+    },
+    "abort": {
+      "already_configured": "A Magyar Posta már be van állítva."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Magyar Posta beállításai",
+        "menu_options": {
+          "parcels": "Csomagok",
+          "settings": "Beállítások"
+        },
+        "sections": {
+          "parcels": {
+            "name": "Csomagok",
+            "data": {
+              "add": "Csomag hozzáadása",
+              "remove": "Csomagok eltávolítása"
+            },
+            "data_description": {
+              "add": "Add meg a Magyar Posta ragszámát a nyomon követés indításához. A feladási visszaigazoláson vagy az értesítőn találod."
+            }
+          },
+          "delivered": {
+            "name": "Kézbesített csomagok",
+            "data": {
+              "delivered_filter_type": "Szűrés",
+              "delivered_filter_amount": "Mennyiség"
+            },
+            "data_description": {
+              "delivered_filter_type": "Az elmúlt X nap kézbesített csomagjait mutatja, vagy a legutóbbi X darabra korlátoz.",
+              "delivered_filter_amount": "A megjelenítendő napok vagy csomagok száma."
+            }
+          },
+          "history": {
+            "name": "Csomag előzményei",
+            "data": {
+              "include_history": "Állapotelőzmények megjelenítése"
+            },
+            "data_description": {
+              "include_history": "Csomagonként egy előzmény attribútumot ad, amely minden állapotfrissítést felsorol (időpont, állapot, eredeti szöveg). Alapértelmezetten kikapcsolva."
+            }
+          }
+        }
+      },
+      "parcels": {
+        "title": "Csomagok kezelése",
+        "data": {
+          "tracking_codes": "Ragszámok"
+        }
+      },
+      "settings": {
+        "title": "Beállítások",
+        "data": {
+          "delivered_filter_type": "Kézbesített csomagok: szűrés",
+          "delivered_filter_amount": "Kézbesített csomagok: mennyiség",
+          "include_history": "Állapotelőzmények megjelenítése"
+        }
+      }
+    },
+    "error": {
+      "invalid_tracking_code": "Ez nem úgy tűnik, mint egy Magyar Posta ragszám.",
+      "already_tracked": "Ezt a csomagot már nyomon követjük."
+    }
+  },
+  "selector": {
+    "delivered_filter_type": {
+      "options": {
+        "days": "Nap",
+        "parcels": "Csomagok száma"
+      }
+    }
+  },
+  "services": {
+    "track_parcel": {
+      "name": "Csomag nyomon követése",
+      "description": "Csomag nyomon követésének indítása a Magyar Posta ragszámával.",
+      "fields": {
+        "tracking_code": {
+          "name": "Ragszám",
+          "description": "A Magyar Posta ragszáma."
+        }
+      }
+    },
+    "untrack_parcel": {
+      "name": "Nyomon követés leállítása",
+      "description": "Csomag nyomon követésének leállítása a Magyar Posta ragszámával.",
+      "fields": {
+        "tracking_code": {
+          "name": "Ragszám",
+          "description": "A Magyar Posta ragszáma, amelynek nyomon követését leállítjuk."
+        }
+      }
+    }
+  },
+  "device_automation": {
+    "trigger_type": {
+      "parcel_registered": "Csomag regisztrálva",
+      "parcel_status_changed": "Csomag állapota megváltozott",
+      "parcel_delivered": "Csomag kézbesítve",
+      "parcel_delivery_time_changed": "Csomag várható kézbesítési ideje megváltozott"
+    }
+  },
+  "entity": {
+    "button": {
+      "refresh": {
+        "name": "Frissítés"
+      }
+    },
+    "calendar": {
+      "deliveries": {
+        "name": "Kézbesítések"
+      }
+    },
+    "sensor": {
+      "incoming_parcels": {
+        "name": "Érkező csomagok",
+        "unit_of_measurement": "csomag"
+      },
+      "next_delivery": {
+        "name": "Következő kézbesítés"
+      },
+      "en_route_to_pickup_point": {
+        "name": "Átvételi pontra útban",
+        "unit_of_measurement": "csomag"
+      },
+      "awaiting_pickup": {
+        "name": "Átvételre kész",
+        "unit_of_measurement": "csomag"
+      },
+      "delivered_parcels": {
+        "name": "Kézbesített csomagok",
+        "unit_of_measurement": "csomag"
+      },
+      "last_update": {
+        "name": "Utolsó sikeres frissítés"
+      },
+      "parcel": {
+        "name": "Csomag {barcode}"
+      }
+    }
+  }
+}
