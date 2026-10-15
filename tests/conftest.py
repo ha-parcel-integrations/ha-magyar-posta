@@ -19,9 +19,10 @@ def reset_one_shot_warnings():
     test's one-shot-warning assertion would depend on which test already
     triggered that status code first.
     """
-    from custom_components.magyar_posta import parcels
+    from custom_components.magyar_posta import api, parcels
 
     parcels._unmapped_statuses_logged.clear()
+    api._empty_scan_lists_logged.clear()
     yield
 
 

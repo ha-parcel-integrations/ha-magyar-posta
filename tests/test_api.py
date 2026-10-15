@@ -82,6 +82,14 @@ async def test_get_parcel_returns_none_on_an_empty_scan_list():
     assert await client.async_get_parcel(CODE) is None
 
 
+async def test_an_empty_scan_list_is_reported_once_per_code(caplog):
+    client = MagyarPostaApiClient(_session_returning(200, wire(CODE, [])))
+    with caplog.at_level("WARNING"):
+        assert await client.async_get_parcel(CODE) is None
+        assert await client.async_get_parcel(CODE) is None
+    assert caplog.text.count("empty scan list") == 1
+
+
 async def test_get_parcel_raises_when_the_rows_are_not_a_list():
     client = MagyarPostaApiClient(_session_returning(200, wire(CODE, {"x": 1})))
     with pytest.raises(MagyarPostaApiError):

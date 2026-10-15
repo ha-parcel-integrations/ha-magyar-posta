@@ -23,6 +23,10 @@ from .const import CODE_KEY, ROWS_KEY, TRACKING_API_URL, TRACKING_LANGUAGE
 
 _LOGGER = logging.getLogger(__name__)
 
+# Tracking codes whose empty scan list has already been reported, so a code
+# that stays empty is logged once per HA session instead of on every poll.
+_empty_scan_lists_logged: set[str] = set()
+
 class MagyarPostaApiError(Exception):
     """Raised when a Magyar Posta API call returns an unexpected response."""
 
@@ -107,9 +111,11 @@ class MagyarPostaApiClient:
         if not isinstance(rows, list):
             raise MagyarPostaApiError("unexpected body (scan rows are not a list)")
         if not rows:
-            _LOGGER.warning(
-                "Magyar Posta returned an empty scan list for %s", tracking_code
-            )
+            if tracking_code not in _empty_scan_lists_logged:
+                _empty_scan_lists_logged.add(tracking_code)
+                _LOGGER.warning(
+                    "Magyar Posta returned an empty scan list for %s", tracking_code
+                )
             return None
 
         return {CODE_KEY: tracking_code, ROWS_KEY: rows}
