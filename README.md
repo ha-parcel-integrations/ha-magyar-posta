@@ -45,7 +45,7 @@ Part of the [ha-parcel-integrations](https://ha-parcel-integrations.github.io/) 
 
 ## Requirements
 
-- Home Assistant 2024.12 or newer
+- Home Assistant 2025.12 or newer
 - A Magyar Posta parcel and its tracking code (from the shipping
   confirmation email, the shop's dispatch notice or the missed-delivery
   card) — no account needed
