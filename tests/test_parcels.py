@@ -4,7 +4,8 @@ These need no Home Assistant instance — the whole point of keeping
 ``parcels.py`` free of I/O is that the carrier-specific mapping can be tested
 as plain functions.
 """
-from datetime import datetime, timedelta, timezone
+
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -63,7 +64,7 @@ def _scan(category, detail=None):
 
 
 @pytest.mark.parametrize(
-    "category,expected",
+    ("category", "expected"),
     [
         ("1", ParcelStatus.REGISTERED),
         ("2", ParcelStatus.IN_TRANSIT),
@@ -180,7 +181,9 @@ def test_the_courier_band_splits_on_the_detail_code():
     assert parcel["pickup"] is True
     assert parcel["pickup_point"] == "Nyíregyháza 1 posta"
 
-    carried = row("4", "20260921", "09:00:19", "A küldemény a kézbesítőnél van", "IKRKI")
+    carried = row(
+        "4", "20260921", "09:00:19", "A küldemény a kézbesítőnél van", "IKRKI"
+    )
     carried["postaNev"] = "Székesfehérvári Operatív Osztály|Székesfehérvár"
     on_van = normalize_parcel(payload(ACTIVE_CODE, [carried]))
     assert on_van["status"] == ParcelStatus.OUT_FOR_DELIVERY
@@ -254,7 +257,7 @@ def test_the_epoch_is_preferred_over_the_offset_free_split_pair():
 def test_parse_iso_handles_z_naive_and_garbage():
     assert parse_iso("2026-04-29T13:12:42Z").tzinfo is not None
     # A naive value is assumed UTC so mixed lists still sort.
-    assert parse_iso("2026-04-29T13:12:42").tzinfo == timezone.utc
+    assert parse_iso("2026-04-29T13:12:42").tzinfo == UTC
     assert parse_iso("not-a-date") is None
     assert parse_iso(None) is None
 
@@ -281,9 +284,15 @@ def test_parse_row_datetime_without_a_usable_moment_is_none():
     assert row_timestamp({}) is None
     # A row whose split date is unusable still has its epoch to fall back on;
     # only a row with neither has no place in the timeline.
-    assert parse_row_datetime(
-        {"tranzakcioValodiDatum": "13/10/2026", "tranzakcioValodiIdopont": "08:00:00"}
-    ) is None
+    assert (
+        parse_row_datetime(
+            {
+                "tranzakcioValodiDatum": "13/10/2026",
+                "tranzakcioValodiIdopont": "08:00:00",
+            }
+        )
+        is None
+    )
     assert parse_row_datetime({"time": "not-an-epoch"}) is None
 
 
@@ -444,7 +453,7 @@ def test_capabilities_match_what_normalize_parcel_actually_returns():
 
 
 def test_pending_capabilities_are_still_none():
-    """"Awaiting data" must not quietly publish a half-mapped field."""
+    """ "Awaiting data" must not quietly publish a half-mapped field."""
     parcel = normalize_parcel(delivered_sample())
     for field in PENDING_CAPABILITIES:
         assert parcel[field] is None
@@ -586,7 +595,7 @@ def _entry(filter_type: str, amount: int) -> MockConfigEntry:
 
 
 def _delivered_pair() -> list[dict]:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return [
         {"barcode": "RECENT", "delivered_at": (now - timedelta(days=1)).isoformat()},
         {"barcode": "OLD", "delivered_at": (now - timedelta(days=30)).isoformat()},

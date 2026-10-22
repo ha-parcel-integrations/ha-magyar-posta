@@ -1,4 +1,5 @@
 """Tests for Magyar Posta device triggers."""
+
 from unittest.mock import AsyncMock
 
 from custom_components.magyar_posta.const import DOMAIN

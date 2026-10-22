@@ -1,8 +1,9 @@
 """Magyar Posta parcel tracker custom component for Home Assistant."""
+
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
+import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -64,7 +65,9 @@ async def _async_options_updated(
     await entry.runtime_data.coordinator.async_request_refresh()
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: MagyarPostaConfigEntry) -> bool:
+async def async_unload_entry(
+    hass: HomeAssistant, entry: MagyarPostaConfigEntry
+) -> bool:
     """Unload the Magyar Posta config entry."""
     if not await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         return False

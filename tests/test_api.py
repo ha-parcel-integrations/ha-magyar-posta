@@ -1,14 +1,12 @@
 """Tests for the Magyar Posta API client."""
+
 import json
 from unittest.mock import AsyncMock, MagicMock
 
 import aiohttp
 import pytest
 
-from custom_components.magyar_posta.api import (
-    MagyarPostaApiClient,
-    MagyarPostaApiError,
-)
+from custom_components.magyar_posta.api import MagyarPostaApiClient, MagyarPostaApiError
 
 from .payloads import ACTIVE_CODE, DELIVERED_ROWS, wire
 
@@ -62,9 +60,7 @@ async def test_get_parcel_reads_json_despite_an_html_content_type():
 
 async def test_get_parcel_returns_none_when_not_found():
     """An unknown code answers HTTP 200 with the code echoed and a null value."""
-    client = MagyarPostaApiClient(
-        _session_returning(200, wire("RR900000009HU", None))
-    )
+    client = MagyarPostaApiClient(_session_returning(200, wire("RR900000009HU", None)))
     assert await client.async_get_parcel("RR900000009HU") is None
 
 
