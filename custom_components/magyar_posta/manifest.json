@@ -1,6 +1,7 @@
 {
   "domain": "magyar_posta",
   "name": "Magyar Posta",
+  "categories": ["productivity_information"],
   "codeowners": [
     "@peter-mdf"
   ],
