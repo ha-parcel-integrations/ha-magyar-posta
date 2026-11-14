@@ -115,11 +115,13 @@ Decisions and traps that survived the build:
   redacted in diagnostics and deliberately not surfaced as parcel attributes.
   `url` stays in `PENDING_CAPABILITIES`: the tracking page takes its code
   through a form rather than a link, so there is no deep link to publish.
-- **Outgoing support is still to do before release.** Incoming versus outgoing
-  is not modelled: the payload cannot say which side the user is on, so every
-  code is incoming. Consumers can send parcels, so outgoing support
-  (user-declared per code, as for the other account-less carriers) is owed; see
-  *Incoming and outgoing parcels* below.
+- **Outgoing support is owed and still missing.** Incoming versus outgoing is
+  not modelled: the payload cannot say which side the user is on, so every
+  code counts as incoming, which means a parcel the user *sent* sits on their
+  dashboard among the ones they are waiting for. Consumers can send parcels,
+  so this is a gap rather than an exemption — user-declared per code, as for
+  the other account-less carriers; see *Incoming and outgoing parcels* below.
+  Shipped releases predate it, so it is a feature to add, not a release gate.
 
 ## Options and reloads
 
