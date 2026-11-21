@@ -35,10 +35,11 @@ you act in one of these areas:
   summary+diagnostic sensors. Add a new non-parcel sensor's unique_id to the set.
 - **Per-parcel sensors are removed by the summary sensor** via
   `entity_registry.async_remove` (self-removal races and leaves ghosts).
-- **The optional pickup-point summaries are a pair.** A carrier that can tell
-  a parcel is destined for a pickup point exposes
-  `en_route_to_pickup_point` for `pickup is true` before it arrives; one that
-  can reach `ParcelStatus.AT_PICKUP_POINT` also exposes `awaiting_pickup`.
+- **The pickup-point summaries are a pair.** A carrier that can deliver to a
+  pickup point or locker exposes both `en_route_to_pickup_point` and
+  `awaiting_pickup`, even before a real parcel has shown the status or flag
+  (they read 0 until then; record it in `PENDING_*`). A carrier without pickup
+  points exposes neither and keeps `pickup` constantly False.
   See *Parcel contract* in `CONVENTIONS.md`. Say "pickup point", not
   "ServicePoint"/"parcel shop"/"locker", for the generic concept; the
   example carrier demonstrates both canonical sensors.
@@ -80,13 +81,14 @@ Decisions and traps that survived the build:
   held one parcel for 17 days. That it is not `problem` is a decision
   (2026-10-14): its ordinal never diverges, and the suite maps customs as
   transit. It is the mapping a reviewer will want to re-litigate.
-- **`en_route_to_pickup_point` is always empty, `awaiting_pickup` is not.**
-  Nothing in the payload says a parcel is *destined* for a counter before it
-  arrives there, so `pickup` only turns true on the collection scan itself.
-  Keep both: the pair is the suite's contract, and removing the first would
-  have to be undone the moment the carrier starts announcing it earlier.
-- **`pickup_point` is the office that made the collection scan**, read off
-  `postaNev` and cut at its `|` (the half after it only repeats the town the
+- **`en_route_to_pickup_point` reads 0 until the carrier announces a counter
+  early, `awaiting_pickup` does not.** Nothing in the payload says a parcel is
+  *destined* for a counter before it arrives there, so `pickup` only turns true
+  once a scan maps to `at_pickup_point`, and stays true after collection. Both
+  sensors stay, as the contract has it; the missing early signal is the
+  evidence still owed.
+- **`pickup_point` is the office that made the pickup scan**, filled whenever
+  `pickup` is true (also once collected), read off `postaNev` and cut at its `|` (the half after it only repeats the town the
   name already carries). Every other scan's `postaNev` is the depot that
   handled the parcel, so it is read on a collection scan and nowhere else.
 - **De-duplication depends on the band.** A delivered parcel reports its

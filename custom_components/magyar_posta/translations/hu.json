@@ -130,7 +130,7 @@
         "name": "Következő kézbesítés"
       },
       "en_route_to_pickup_point": {
-        "name": "Átvételi pontra útban",
+        "name": "Úton az átvételi pont felé",
         "unit_of_measurement": "csomag"
       },
       "awaiting_pickup": {
