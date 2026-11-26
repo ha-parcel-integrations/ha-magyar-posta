@@ -88,6 +88,10 @@
         "tracking_code": {
           "name": "Ragszám",
           "description": "A Magyar Posta ragszáma."
+        },
+        "contents": {
+          "name": "Tartalom",
+          "description": "Mi van a csomagban, saját szavaiddal. Egy követett csomagnál az újbóli meghívás lecseréli a tartalmat; az üres szöveg törli."
         }
       }
     },
@@ -98,6 +102,20 @@
         "tracking_code": {
           "name": "Ragszám",
           "description": "A Magyar Posta ragszáma, amelynek nyomon követését leállítjuk."
+        }
+      }
+    },
+    "update_contents": {
+      "name": "Csomag tartalmának frissítése",
+      "description": "Add meg saját szavaiddal, mi van a csomagban egy nyomkövetési kódhoz. Az üres szöveg törli a tartalmat.",
+      "fields": {
+        "tracking_code": {
+          "name": "Ragszám",
+          "description": "A Magyar Posta ragszáma."
+        },
+        "contents": {
+          "name": "Tartalom",
+          "description": "Mi van a csomagban, saját szavaiddal. Az üres szöveg törli."
         }
       }
     }

@@ -17,9 +17,9 @@ async def test_diagnostics_redacts_and_counts(hass):
     entry.options = {"parcels": [{"tracking_code": ACTIVE_CODE}]}
     entry.runtime_data.coordinator.current_tier_minutes = 15
     entry.runtime_data.coordinator.update_interval = timedelta(minutes=15)
-    entry.runtime_data.coordinator.data = [
-        normalize_parcel(active_sample(), include_history=True)
-    ]
+    parcel = normalize_parcel(active_sample(), include_history=True)
+    parcel["contents"] = "Garden hose"
+    entry.runtime_data.coordinator.data = [parcel]
     entry.runtime_data.coordinator.delivered = []
     entry.runtime_data.coordinator.delivered_codes = set()
 
@@ -43,6 +43,8 @@ async def test_diagnostics_redacts_and_counts(hass):
     for scan in result["incoming"][0]["raw"]["rows"]:
         assert scan["cimzettHelyiseg"] == "**REDACTED**"
         assert scan["cimzettOrszag"] == "**REDACTED**"
+    assert result["incoming"][0]["contents"] == "**REDACTED**"
+    assert "Garden hose" not in str(result)
     assert "Budapest" not in str(result)
     # non-identifying fields survive, or the diagnostics would be useless
     assert result["incoming"][0]["status"] == "out_for_delivery"
